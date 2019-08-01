@@ -3,8 +3,8 @@
     <label>
         Your Name:
     </label>
-    <input name="user" v-model="user"></input>
-    <button class='btn btn-primary col-12 mt-3' v-on:click="create">
+    <input name="user" v-model="user" v-on:keyup.enter="create"></input>
+    <button class='btn btn-primary col-12 mt-3' v-bind:disabled="user == ''" v-on:click="create()">
         Create
     </button>
 </main>

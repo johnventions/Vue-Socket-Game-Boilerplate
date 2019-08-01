@@ -22,11 +22,11 @@ app.use(session({
     store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
-app.use('/api', apiRoutes);
-
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/dist/index.html');
 });
+
+app.use('/api', apiRoutes);
 
 var server = app.listen(process.env.PORT || 5050, '0.0.0.0', function () {
     var port = server.address().port;

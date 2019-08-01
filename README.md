@@ -14,8 +14,8 @@ Then update the `server/settings.js` file to include your individual project set
 
 ### Compiles and hot-reloads for development
 ```
-npm start
 npm run api
+npm run dev
 ```
 These commands need to be run in two separate terminals, so that you can run the Vue webpack server as well as the backend express server. API calls are proxied to the backend via the `package.json` file settings. The API task is configured with nodemon so that it will auto-refresh upon dev changes. Product builds will not require the two tasks, since everything will be run on the express server.
 

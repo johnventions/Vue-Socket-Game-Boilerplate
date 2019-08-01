@@ -9,15 +9,21 @@ export default new Vuex.Store({
 		loggedIn: 0, // bool for logged in
 		user: '',
 		code: '',
-		admin: 0
+		admin: 0,
+		gameID: null,
+		started: false,
 
 	},
 	mutations: {
-		setLogin(state, user, code, isAdmin) {
+		setLogin(state, data) {
 			state.loggedIn = 1;
-			state.user = user;
-			state.code = code;
-			state.isAdmin = isAdmin;
+			state.user = data.player.name;
+			state.admin = data.player.admin;
+		},
+		setGame(state, game) {
+			state.gameID = game._id;
+			state.started = game.started;
+			state.code = game.code;
 		}
 	},
 	getters: {
@@ -26,7 +32,7 @@ export default new Vuex.Store({
 				loggedIn: state.loggedIn,
 				user: state.user,
 				code: state.code,
-				isAdmin: state.isAdmin
+				admin: state.admin
 			}
 		}
 	},

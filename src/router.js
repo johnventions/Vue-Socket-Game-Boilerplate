@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home/Home.vue'
 import Create from './views/Create/Create.vue'
 import Join from './views/Join/Join.vue'
+import Lobby from './views/Lobby/Lobby.vue'
 import Game from './views/Game/Game.vue'
 
 Vue.use(Router);
@@ -24,6 +25,14 @@ export default new Router({
 		path: '/join',
 		name: 'join',
 		component: Join
+	},
+	{
+		path: '/lobby',
+		name: 'lobby',
+		component: Lobby,
+		meta: {
+			requiresAuth: true
+		}
 	},
 	{
 		path: '/game',

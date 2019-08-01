@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import authGuard from './authGuard'
 import VueSocketIO from 'vue-socket.io'
+import settings from "./settings";
 import store from './store'
 import Axios from "axios";
 
@@ -11,6 +12,7 @@ require('./styles/form.styl')
 router.beforeEach(authGuard);
 
 Vue.prototype.$http = Axios;
+Vue.prototype.$settings = settings;
 Vue.config.productionTip = false;
 
 Vue.use(new VueSocketIO({

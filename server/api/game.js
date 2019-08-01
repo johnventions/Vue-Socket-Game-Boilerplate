@@ -1,36 +1,37 @@
 
-var mongoose = require("mongoose");
-
 const Game = require("../models/Game.js");
-const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-function makecode() {
-    var code = "";
-    for (var i = 0; i < 4; i++)
-        code += alpha.charAt(Math.floor(Math.random() * alpha.length));
-    return code;
-}
+const GameService = require("../utils/GameService.js");
+const routes = require('express').Router();
 
 module.exports = function (db) {
-    const routes = require('express').Router();
-
     routes.post("/", async function (req, res) {
-        var code = makecode();
-        var newgame = new Game({
-            "_id": new mongoose.Types.ObjectId,
-            "code": code,
-            "createDate": Date.now(),
-            "started": false,
-            "completed": false,
-        });
+        var name = req.body.user;
+        var newgame = await GameService.NewGame();
+        var newplayer = await GameService.NewPlayer(newgame, name, true);
         newgame.save();
-        req.session.code = code;
-        console.log("Created game: " + code);
-        return res.status(200).json({ message: 'Connected!' + code });
+        req.session.code = newgame.code;
+        return res.status(200).json({
+            success: true,
+            game: GameService.GetGameData(newgame),
+            player: GameService.GetPlayerData(newplayer),
+            message: 'Connected!'
+        });
     });
 
     routes.post("/join/:gameid", async function (req, res) {
+        var name = req.body.user;
         var code = req.params.gameid;
-        return res.status(200).json({ message: 'Connected!' + code });
+        GameService.FindGame(code, async function (game) {
+            var newplayer = await GameService.NewPlayer(game, name, true);
+            game.save();
+            return res.status(200).json({
+                success: true,
+                game: GameService.GetGameData(game),
+                player: GameService.GetPlayerData(newplayer),
+                message: 'Connected!'
+            });
+        });
+
     });
 
     return routes;

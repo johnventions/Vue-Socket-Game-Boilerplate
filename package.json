@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "start": "nodemon ./server/server.js",
+    "api": "nodemon ./server/server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve"
