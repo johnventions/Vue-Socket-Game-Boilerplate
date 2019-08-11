@@ -25,6 +25,9 @@ module.exports = {
         return g;
     },
 
+    /** @param {game} game */
+    /** @param {string} name */
+    /** @param {bool} admin */
     NewPlayer: async function (game, name, admin) {
         var p = new Player({
             _id: new mongoose.Types.ObjectId,
@@ -33,30 +36,46 @@ module.exports = {
             game: game._id,
             admin: admin
         });
-        p.save();
-        game.players++;
-        return p;
-    },
-
-    FindGame: async function (code, callback) {
-        console.log("Finding " + code);
-        Game.findOne({ code: code }, function (err, g) {
-            if (err) {
-                return err;
-            }
-            if (callback) {
-                callback(g);
-            }
+        return p.save().then( function() {
+            game.players++;
+            return p;
         });
     },
 
-    JoinGame: async function (game, callback) {
-        console.log("Joining " + game.code)
-        if (callback) {
-            callback(game);
-        }
+
+    /** @param {string} code */
+    FindGame: async function (code) {
+        code = code.toUpperCase();
+        return Game.findOne({ code: code }, function (err, game) {
+            if (err) {
+                return null;
+            }
+            return game;
+        });
     },
 
+    /** @param {id} gameID */
+    /** @param {string} name */
+    FindPlayer: async function(gameID, name) {
+        return Player.findOne({game: gameID, name: name}, function(err, p) {
+            if (err) {
+                return null;
+            }
+            return p;
+        });
+    },
+
+    /** @param {id} gameID */
+    FindPlayers: async function(gameID) {
+        return Player.find({game: gameID}, function(err, p){
+            if (err) {
+                return [];
+            }
+            return p;
+        })
+    },
+
+    /** @param {game} game */
     GetGameData: function (game) {
         return {
             _id: game._id,
@@ -67,6 +86,7 @@ module.exports = {
         }
     },
 
+    /** @param {player} player */
     GetPlayerData: function (player) {
         return player;
     }

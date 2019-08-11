@@ -4,7 +4,9 @@
         Your Name:
     </label>
     <input name="user" v-model="user" v-on:keyup.enter="create"></input>
-    <button class='btn btn-primary col-12 mt-3' v-bind:disabled="user == ''" v-on:click="create()">
+    <button class='btn btn-primary col-12 mt-3' 
+            v-bind:disabled="user == '' || pending" 
+            v-on:click="create()">
         Create
     </button>
 </main>

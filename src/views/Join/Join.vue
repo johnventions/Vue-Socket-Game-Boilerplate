@@ -1,5 +1,5 @@
 <template src="./Join.html"></template>
-<style src="./Join.styl" lang="styl"></style>
+<style src="./Join.styl" lang="styl" scoped></style>
 
 <script>
 import CookieService from "@/cookies.js";
@@ -10,26 +10,31 @@ export default {
 		return {
 			user: CookieService.getCookie("user") || "",
 			code: CookieService.getCookie("code") || "",
+			pending: false,
 		};
 	},
 	components: {},
 	mounted: function() {},
 	methods: {
 		join: function() {
-			console.log("Joining");
+			if (this.pending) return;
 			if (this.user != "" && this.code.length == 4) {
-				this.$http.post("/api/game/join/" + this.code, {
+				this.pending = true;
+				this.$http.post("/api/game/" +this.code + "/join", {
 					user: this.user
 				}).then( function(res) {
-					console.log(res);
-					this.$store.commit('setGame', res.data.game);
-					this.$store.commit('setLogin', {code: res.data.game.code, player: res.data.player});
+					this.pending = false;
+					this.$store.commit('setup', {player: res.data.player, game: res.data.game, players: res.data.players});
 					if ( res.data.game.started ) {
 						this.$router.push("/game");
 					} else {
 						this.$router.push("/lobby");
 					}
-				}.bind(this));
+				}.bind(this))
+				.catch( (err) => {
+					console.log("ERROR", err);
+					this.pending = false;
+				});
 			}
 		}
 	}

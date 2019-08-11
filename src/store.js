@@ -8,22 +8,34 @@ export default new Vuex.Store({
 		token: '',
 		loggedIn: 0, // bool for logged in
 		user: '',
+		userID: '',
 		code: '',
 		admin: 0,
 		gameID: null,
 		started: false,
+		players: []
 
 	},
 	mutations: {
-		setLogin(state, data) {
+		setup(state, payload) {
+			console.log("Setup");
+			this.commit('setLogin', payload.player);
+			this.commit('setGame', payload.game);
+			this.commit('setPlayers', payload.players)
+		},
+		setLogin(state, player) {
 			state.loggedIn = 1;
-			state.user = data.player.name;
-			state.admin = data.player.admin;
+			state.user = player.name;
+			state.userID = player._id;
+			state.admin = player.admin;
 		},
 		setGame(state, game) {
 			state.gameID = game._id;
 			state.started = game.started;
 			state.code = game.code;
+		},
+		setPlayers(state, players) {
+			state.players = players;
 		}
 	},
 	getters: {
@@ -31,9 +43,13 @@ export default new Vuex.Store({
 			return {
 				loggedIn: state.loggedIn,
 				user: state.user,
+				userID: state.userID,
 				code: state.code,
 				admin: state.admin
 			}
+		},
+		players: state => {
+			return state.players;
 		}
 	},
 	actions: {

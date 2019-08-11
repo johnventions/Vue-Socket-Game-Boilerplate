@@ -20,6 +20,15 @@ Vue.use(new VueSocketIO({
 	connection: 'http://localhost:5050/',
 }))
 
+Vue.mixin({
+	methods: {
+		joinRoom: function(code) {
+			console.log("Joining: ", code);
+			this.$socket.emit('Join', code);
+		}
+	}
+});
+
 new Vue({
 	router,
 	store,

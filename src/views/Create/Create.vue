@@ -10,25 +10,30 @@ export default {
 	data: () => {
 		return {
 			user: "",
+			pending: false,
 		};
 	},
 	components: {},
 	mounted: function() {},
 	methods: {
 		create: function() {
+			if (this.pending || this.user.length == 0) return;
+			this.pending = true;
 			if (this.user != "") {
 				this.$http.post("/api/game", {
 					user: this.user
 				}).then( function(res){
 					console.log(res);
-					this.$store.commit('setGame', res.data.game);
-					this.$store.commit('setLogin', {code: res.data.game.code, player: res.data.player});
+					this.$store.commit('setup', {player: res.data.player, game: res.data.game, players: res.data.players});
 					if ( res.data.game.started ) {
 						this.$router.push("/game");
 					} else {
 						this.$router.push("/lobby");
 					}
-				}.bind(this));
+				}.bind(this)
+				).catch( () => {
+					this.pending = false;
+				});
 			}
 		}
 	}

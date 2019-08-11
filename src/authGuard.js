@@ -7,7 +7,7 @@ export default function (to, from, next) {
         // if not, redirect to login page.
         if (!status.loggedIn) {
             next({
-                path: '/join',
+                path: '/',
                 query: { redirect: to.fullPath }
             })
         } else {

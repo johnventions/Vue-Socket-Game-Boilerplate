@@ -1,7 +1,7 @@
 
-module.exports = function (db) {
+module.exports = function (db, io) {
     const routes = require('express').Router();
-    const game = require("./game")(db);
+    const game = require("./game")(db, io);
 
     routes.use("/game", game);
 
