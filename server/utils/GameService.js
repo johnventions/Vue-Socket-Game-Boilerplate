@@ -14,6 +14,15 @@ function makecode() {
 module.exports = {
     NewGame: async function () {
         var code = makecode();
+        var codeapproved = false;
+        while (!codeapproved) {
+            var existing = await this.FindGame(code);
+            if (existing == null) {
+                codeapproved = true;
+            } else {
+                code = makecode();
+            }
+        }
         var g = new Game({
             _id: new mongoose.Types.ObjectId,
             code: code,

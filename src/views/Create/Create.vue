@@ -2,14 +2,13 @@
 <style src="./Create.styl" lang="styl"></style>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from "@/components/HelloWorld.vue";
+import CookieService from "@/cookies.js";
 
 export default {
 	name: "create",
 	data: () => {
 		return {
-			user: "",
+			user: CookieService.getCookie("user") || "",
 			pending: false,
 		};
 	},
